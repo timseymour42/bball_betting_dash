@@ -5,7 +5,7 @@ from datetime import date
 import boto3
 from io import StringIO
 
-SPORTSBOOKS = ['fanduel', 'betmgm', 'draftkings']
+SPORTSBOOKS = ['fanduel', 'betmgm', 'draftkings', 'bet365', 'pointsbet', 'bet_rivers_ny']
 COLUMNS_TO_EXPAND = ['home_spread', 'away_spread', 'home_spread_odds', 'away_spread_odds', 'under_odds', 'over_odds', 'total', 'home_ml', 'away_ml']
 SPORTS = ['NBA', 'NCAAB']
 
@@ -51,9 +51,9 @@ def upload_to_s3(bucket_name, prefix, sport, data):
     object_key = f'{prefix}{sport}/{datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}.csv'
     s3_client.put_object(Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue())
 
-def main():
-    sports = ['NBA', 'NCAAB']  # Define your sports categories
-    bucket_name = 'your-s3-bucket-name'  # Your S3 bucket name
+def main(event, context):
+    sports = SPORTS
+    bucket_name = 'sports-odds-data-collection-dev'
     prefix = 'sports_data/'  # Prefix within your S3 bucket for organization
 
     # Scrape the data
